@@ -2,7 +2,7 @@ from setuptools import setup, find_packages
 
 setup(
     name="vertica-swift-backup",
-    version="1.1.2",
+    version="1.1.3",
     author="Tim Kuhlman",
     author_email="tim@backgroundprocess.com",
     description="A script to backup/restore Vertica to OpenStack Swift.",
