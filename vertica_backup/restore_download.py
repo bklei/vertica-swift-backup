@@ -100,7 +100,7 @@ def main(argv=None):
             for relative_path in to_del:
                 fs_store.delete(relative_path)
 
-        EpochFiles(os.path.join(base_dir, prefix_dir), config['snapshot_name'], swift_metadata.date).restore()
+        EpochFiles(os.path.join(base_dir, prefix_dir), config['catalog_dir'], config['snapshot_name'], swift_metadata.date).restore()
 
         # Save the swift metadata to the local fs, to indicate the restore is done
         swift_metadata.save(fs_store)
