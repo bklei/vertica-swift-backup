@@ -58,12 +58,13 @@ def nagios_exit(exit_status, msg, duration, warn):
         sys.exit(0)
 
 
-def run_vbr(config):
-    """ Run the vbr command according to the values in the configuration.
+def run_vbr(config, task):
+    """ Run the vbr command according to the values in the configuration
+        and the specified task.
     """
     output = None
     try:
-        vbr_command = [vbr_bin, '--config-file', config['vbr_config'], '--task', 'backup']
+        vbr_command = [vbr_bin, '--config-file', config['vbr_config'], '--task', task]
         os.environ['LANG'] = 'en_US.UTF-8'  # vbr requires this to be set
         log.info('Running vbr command: %s' % vbr_command)
         output = subprocess.check_output(vbr_command, stderr=subprocess.STDOUT)
@@ -98,11 +99,13 @@ def main(argv=None):
 
     # Run the vbr backup command - The vbr run is quite fast typically completing in less than a minute
     if config['run_vbr']:
-        run_vbr(config)  # If this fails it will sys.exit with an appropriately bad nagios error
+        run_vbr(config, 'init')
+        run_vbr(config, 'backup')
 
     try:
         catalog_dir = config['catalog_dir']
-        base_dir, prefix_dir = calculate_paths(config)
+        base_dir = config['backup_dir']
+        prefix_dir = ''
         swift_store = SwiftStore(config['swift_key'], config['swift_region'], config['swift_tenant'],
                                  config['swift_url'], config['swift_user'], prefix_dir)
         fs_store = FSStore(base_dir, prefix_dir)
