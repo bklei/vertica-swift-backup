@@ -53,9 +53,8 @@ def calculate_paths(config, v_node_name=None):
     """ Returns the base_dir and prefix_dir given the config and v_node_name
         If the v_node_name is None it pulls the info from the local drive.
     """
-    if v_node_name is None:
-        v_node_name = glob(os.path.join(config['backup_dir'], 'v_' + config['dbname'] + '_node*'))[0].split('/')[-1]
-    prefix_dir = os.path.join(v_node_name, config['snapshot_name'])
+    snap_dir = 'Snapshots/' + config['snapshot_name'] + '*/v_mon_node*/'
+    prefix_dir = glob(os.path.join(config['backup_dir'], snap_dir))[0]
     return config['backup_dir'], prefix_dir
 
 
@@ -75,7 +74,7 @@ def choose_one(alist, msg):
     return alist[int(choosen)]
 
 
-def delete_pickles(store, keep=1):
+def delete_pickles(store, keep=7):
     """ Remove pickles in the store, keeping the specified number of the newest pickles.
     """
     pickles = store.list_pickles()

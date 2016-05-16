@@ -40,8 +40,8 @@ from utils import calculate_paths, choose_one, delete_pickles, LogTime, sizeof_f
 def main(argv=None):
     if argv is None:
         argv = sys.argv
-    if (len(argv) > 5) or (len(argv) < 4):
-        print "Usage: " + argv[0] + " <config file> <domain> <v_node> [YYYY_MM_DD]"
+    if (len(argv) > 6) or (len(argv) < 5):
+        print "Usage: " + argv[0] + " <config file> <domain> <v_node> <hostname> [YYYY_MM_DD]"
         print "The config file is the same format as used for backups, backup dir, snapshot name and swift credentials are used"
         print 'The domain is the domain to be restored from swift and the v_node is the vertica node name to restore data for'
         print 'If the year/month/day is specified the most recent backup on that day will be downloaded rather than prompting'
@@ -50,8 +50,9 @@ def main(argv=None):
     config_file = argv[1]
     domain = argv[2]
     v_node_name = argv[3]
-    if len(argv) == 5:
-        day = argv[4]
+    hostname = argv[4]
+    if len(argv) == 6:
+        day = argv[5]
     else:
         day = None
     config = yaml.load(open(config_file, 'r'))
@@ -65,7 +66,8 @@ def main(argv=None):
         # Setup swift/paths
         base_dir, prefix_dir = calculate_paths(config, v_node_name)
         swift_store = SwiftStore(config['swift_key'], config['swift_region'], config['swift_tenant'],
-                                 config['swift_url'], config['swift_user'], prefix_dir, domain=domain, vnode=v_node_name)
+                                 config['swift_url'], config['swift_user'], prefix_dir, domain=domain,
+                                 vnode=v_node_name, hostname=hostname)
         fs_store = FSStore(base_dir, prefix_dir)
 
         # Get the metadata from the last restore (if any)

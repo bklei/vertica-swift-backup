@@ -36,14 +36,15 @@ class EpochFiles(object):
 
     def __init__(self, backup_dir, catalog_dir, snapshot_name, date):
         self.date_str = date.strftime("%Y_%m_%d_%H%M")
-        self.epoch_files = self._get_epoch_files(backup_dir, catalog_dir, snapshot_name)
+        self.epoch_files = self._get_epoch_files(backup_dir, snapshot_name)
 
     @staticmethod
-    def _get_epoch_files(backup_dir, catalog_dir, snapshot_name):
+    def _get_epoch_files(backup_dir, snapshot_name):
+        snap_dir = 'Snapshots/' + snapshot_name + '*/v_mon_node*/'
         files = [
-            os.path.join(backup_dir, snapshot_name + '.txt'),
-            os.path.join(backup_dir, snapshot_name + '.info'),
-            os.path.join(backup_dir, 'catalog.ctlg'),
+            glob(os.path.join(backup_dir, snap_dir))[0] + snapshot_name + '.txt',
+            glob(os.path.join(backup_dir, snap_dir))[0] + snapshot_name + '.info',
+            glob(os.path.join(backup_dir, snap_dir))[0] + snapshot_name + '.ctlg',
         ]
         return files
 
