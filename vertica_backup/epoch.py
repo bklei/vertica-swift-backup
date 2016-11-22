@@ -40,7 +40,7 @@ class EpochFiles(object):
 
     @staticmethod
     def _get_epoch_files(backup_dir, snapshot_name):
-        snap_dir = 'Snapshots/' + snapshot_name + '*/v_mon_node*/'
+        snap_dir = 'Snapshots/' + snapshot_name + '*/v_*_node*/'
         files = [
             glob(os.path.join(backup_dir, snap_dir))[0] + snapshot_name + '.txt',
             glob(os.path.join(backup_dir, snap_dir))[0] + snapshot_name + '.info',
