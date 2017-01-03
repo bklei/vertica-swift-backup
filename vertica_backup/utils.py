@@ -53,8 +53,8 @@ def calculate_paths(config, v_node_name=None):
     """ Returns the base_dir and prefix_dir given the config and v_node_name
         If the v_node_name is None it pulls the info from the local drive.
     """
-    snap_dir = 'Snapshots/' + config['snapshot_name'] + '*/v_mon_node*/'
-    prefix_dir = glob(os.path.join(config['backup_dir'], snap_dir))[0]
+    snap_dir = 'Snapshots/' + config['snapshot_name'] + '*/v_' + config['dbname'] + '_node*/'
+    prefix_dir = os.path.join(config['backup_dir'], snap_dir)
     return config['backup_dir'], prefix_dir
 
 
